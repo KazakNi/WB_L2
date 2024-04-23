@@ -1,5 +1,11 @@
 package main
 
+import (
+	"fmt"
+	"sort"
+	"strings"
+)
+
 /*
 === Поиск анаграмм по словарю ===
 
@@ -20,5 +26,38 @@ package main
 */
 
 func main() {
+	res := AnagramSet([]string{"Ласков", "словак", "славок", "сковал", "Марина", "Армани", "ранами", "ранима"})
+	fmt.Println(res)
+}
 
+func AnagramSet(arr []string) *map[string][]string {
+	var res = make(map[string][]string)
+	var set = make(map[string]bool)
+
+	for _, val := range arr {
+		valToLower := strings.ToLower(val)
+		sortedval := []rune(valToLower)
+
+		sort.Slice(sortedval, func(i, j int) bool {
+			return sortedval[i] < sortedval[j]
+		})
+
+		key := string(sortedval)
+
+		if _, ok := set[valToLower]; !ok {
+			set[valToLower] = true
+			res[key] = append(res[key], valToLower)
+		}
+
+	}
+
+	var ans = make(map[string][]string)
+
+	for _, val := range res {
+		if len(val) != 1 {
+			ans[val[0]] = val
+		}
+	}
+
+	return &ans
 }
